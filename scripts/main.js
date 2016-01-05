@@ -15,6 +15,24 @@ var h = require('./helpers');
  */
 
 var App = React.createClass({
+  getInitialState: function() {
+    return {
+      fishes: {},
+      order: {}
+    }
+  },
+  addFish: function(fish) {
+    var timestamp = (new Date()).getTime();
+
+    this.state.fishes['fish-' + timestamp] = fish;
+
+    this.setState({fishes: this.state.fishes})
+  },
+  loadSamples: function() {
+    this.setState({
+      fishes: require('./sample-fishes')
+    });
+  },
   render: function() {
     return (
       <div className="catch-of-the-day">
@@ -22,7 +40,7 @@ var App = React.createClass({
           <Header tagline="Fresh Seafood Market"/>
         </div>
         <Order/>
-        <Inventory/>
+        <Inventory addFish={this.addFish} loadSamples={this.loadSamples}/>
       </div> 
     ) 
   }
@@ -43,8 +61,9 @@ var AddFishForm = React.createClass({
       desc: this.refs.desc.value, 
       image: this.refs.image.value
     }
-    
-    console.log(fish);
+   
+    this.props.addFish(fish);
+    this.refs.fishForm.reset(); 
   },
   render: function() {
     return (
@@ -102,10 +121,15 @@ var Order = React.createClass({
 
 var Inventory = React.createClass({
   render: function() {
+    // alternative to addFish={this.props.addFish}
+    // {...this.props} it takes all of the proprs from inventory component and passes them down to addFishForm component
+    // be careful with that you really need to pass in only what you need down
     return (
       <div>
         <h2>Inventory</h2>
-        <AddFishForm />
+
+        <AddFishForm {...this.props} />
+        <button onClick={this.props.loadSamples}>Load Sample Fishes</button>
       </div>
     ) 
   }
