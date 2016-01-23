@@ -4,9 +4,12 @@
 
 import React from 'react';
 import AddFishForm from './AddFishForm';
+import autobind from 'autobind-decorator';
 
-var Inventory = React.createClass({
-  renderInventory: function(key) {
+@autobind
+class Inventory extends React.Component {
+
+  renderInventory(key) {
     var linkState = this.props.linkState;
     return(
       <div className="fish-edit" key={key}>
@@ -21,8 +24,9 @@ var Inventory = React.createClass({
         <button onClick={this.props.removeFish.bind(null, key)}>Remove Fish</button>
       </div>
     ) 
-  },
-  render: function() {
+  }
+
+  render() {
     // alternative to addFish={this.props.addFish}
     // {...this.props} it takes all of the proprs from inventory component and passes them down to addFishForm component
     // be careful with that you really need to pass in only what you need down
@@ -36,15 +40,16 @@ var Inventory = React.createClass({
         <button onClick={this.props.loadSamples}>Load Sample Fishes</button>
       </div>
     ) 
-  },
-  propTypes: {
-    addFish: React.PropTypes.func.isRequired,
-    loadSamples: React.PropTypes.func.isRequired,
-    fishes: React.PropTypes.object.isRequired,
-    linkState: React.PropTypes.func.isRequired,
-    removeFish: React.PropTypes.func.isRequired
   }
-});
+};
+
+Inventory.propTypes = {
+  addFish: React.PropTypes.func.isRequired,
+  loadSamples: React.PropTypes.func.isRequired,
+  fishes: React.PropTypes.object.isRequired,
+  linkState: React.PropTypes.func.isRequired,
+  removeFish: React.PropTypes.func.isRequired
+}
 
 export default Inventory;
 
